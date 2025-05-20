@@ -55,4 +55,15 @@
     background-size: cover;
     background-position: center;
     color: black;
+    justify-content: end;
+    align-items: start;
+    text-decoration: none;
+    min-height: 300px;
+    color: inherit;
+    overflow: hidden;
+    word-break: break-word;
+}
+.btn-light{
+    width: 40px;
+    height: 40px;
 }
