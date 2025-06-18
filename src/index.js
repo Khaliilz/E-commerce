@@ -5,5 +5,5 @@ const { createApp } = require('./app');
 const app = express();
 
 createApp(app, () => {
-    console.log(`Server is running on port ${process.env.APP_PORT || 3000}`);
+    console.log(`Server is running on http://localhost:${process.env.APP_PORT || 3000}`);
 });
