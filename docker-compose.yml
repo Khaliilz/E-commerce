@@ -9,13 +9,13 @@ services:
       POSTGRES_DB: mydb
     ports:
       - "5432:5432"
-    networks:
-      - app-network
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   backend:
-    build: .
+    build: ./backend
     container_name: node-backend
     environment:
       - PORT=3000
@@ -26,10 +26,20 @@ services:
       - DB_NAME=mydb
     ports:
       - "3000:3000"
-    networks:
-      - app-network
     depends_on:
       - db
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: node-frontend
+    ports:
+      - "3100:3100"
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
 volumes:
   pgdata:
