@@ -1,8 +1,8 @@
 /* Mock data */
-INSERT INTO users (email, password_hash, role) VALUES
-('admin@example.com', 'admin_password_hash', 'admin'),
-('user@example.com', 'user_password_hash', 'user'),
-('seller@example.com', 'seller_password_hash', 'seller');
+INSERT INTO users (fullname, email, password_hash, role) VALUES
+('Giovanni','admin@example.com', 'admin_password_hash', 'admin'),
+('Alberto','user@example.com', 'user_password_hash', 'user'),
+('Pietrellico','seller@example.com', 'seller_password_hash', 'seller');
 
 INSERT INTO products (seller_id, name, description, price, stock, image_base64) VALUES
 (3, 'Product 1', 'Description for product 1', 19.99, 100, 'base64_image_1'),

@@ -11,7 +11,7 @@ const config = {
   port: +DB_PORT
 };
 
-const connectWithRetry = async (retries = 3, delay = 3000) => {
+const connectWithRetry = async (retries = 3, delay = 1500) => {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const client = new Client(config);

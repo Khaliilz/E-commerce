@@ -5,60 +5,85 @@ const { authed } = require('../middleware');
 
 const router = express.Router();
 
-router.post('/api/v1/users/auth', async (req, res) => {
-    // handle both login and registration
-    const { email, password, role } = req.body;
+router.post('/api/v1/users/login', async (req, res) => {
 
-    if (!email || !password || !role) {
+    const {email, password} = req.body;
+    console.log('Login request body:', req.body);
+    if (!email || !password) {
         return res.status(400).json({
             status: 'error',
-            message: 'Email, password and role are required'
+            message: 'Email and password are required'
         });
     }
 
     try {
         // Check if user exists
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        console.log('User query result:', rows);
+        if(rows.length === 0)
+            return res.status(401).json({
+                status: 'error',
+                message: 'User not found'
+        });
 
-        if (rows.length > 0) {
-            // Gestisco login
-            const user = rows[0];
-            if (user.password_hash === hash_salt_pepper(password, email)) {
-                const token = createToken(user);
+        const user = rows[0];
+        if (user.password_hash === hash_salt_pepper(password, email)) {
+            const token = createToken(user);
 
-                res.setHeader('Authorization', `Bearer ${token}`);
-                return res.status(200).json({
-                    status: 'success',
-                    message: 'Login successful',
-                    user: {
-                        id: user.id,
-                        email: user.email,
-                        role: user.role
-                    }
-                });
-            } else {
-                return res.status(401).json({
-                    status: 'error',
-                    message: 'Invalid password'
-                });
-            }
-        } else {
-            // User does not exist, handle registration
-            const newUser = await pool.query('INSERT INTO users (email, password_hash, role) VALUES ($1, $2, $3) RETURNING *', [email, hash_salt_pepper(password, email), role]);
-            
-            res.setHeader('Authorization', `Bearer ${createToken(newUser.rows[0])}`);
-            
+            res.setHeader('Access-Control-Expose-Headers', 'Authorization');
+            res.setHeader('Authorization', `Bearer ${token}`);
             return res.status(200).json({
                 status: 'success',
-                message: 'User registered successfully',
+                message: 'Login successful',
                 user: {
-                    id: newUser.rows[0].id,
-                    email: newUser.rows[0].email,
-                    role: newUser.rows[0].role
+                    id: user.id,
+                    email: user.email,
+                    role: user.role
                 }
+            });
+        } else {
+            return res.status(401).json({
+                status: 'error',
+                message: 'Invalid password'
             });
         }
     } catch (error) {
+        console.error('Error during authentication:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
+        });
+    }
+});
+
+router.post('/api/v1/users/signup', async (req, res) => {
+    try{
+        //console.log('Headers:', req.headers);
+        const { fullname , email, password, role } = req.body;
+        //console.log('Signup request body:', req.body);
+        const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        if(rows.length > 0)
+            return res.status(401).json({
+                status: 'error',
+                message: 'User already exists'
+        });
+
+        const newUser = await pool.query('INSERT INTO users (fullname, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING *', [fullname, email, hash_salt_pepper(password, email), role]);
+            
+        res.setHeader('Access-Control-Expose-Headers', 'Authorization');
+        res.setHeader('Authorization', `Bearer ${createToken(newUser.rows[0])}`);
+            
+        return res.status(200).json({
+            status: 'success',
+            message: 'User registered successfully',
+            user: {
+                id: newUser.rows[0].id,
+                fullname: newUser.rows[0].fullname,
+                email: newUser.rows[0].email,
+                role: newUser.rows[0].role
+            }
+        });
+    }catch(error){
         console.error('Error during authentication:', error);
         res.status(500).json({
             status: 'error',

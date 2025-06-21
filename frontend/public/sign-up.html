@@ -24,12 +24,6 @@
                         </a>
                     </li>
                     <li class="nav-item mb-3 d-flex justify-content-center">
-                        <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="preferiti.html">
-                            <i class="bi bi-heart fs-4"></i>
-                            <span class="visually-hidden">Preferiti</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mb-3 d-flex justify-content-center">
                         <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="carrello.html">
                             <i class="bi bi-cart fs-4"></i>
                             <span class="visually-hidden">Carrello</span>
@@ -64,29 +58,42 @@
                         <h4>Registrati</h4>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form id="signUpForm">
                             <div class="mb-3">
-                                <label for="regName" class="form-label">Nome</label>
-                                <input type="text" class="form-control" id="regName" placeholder="Il tuo nome" required>
+                                <label for="signUpName" class="form-label">Cognome e Nome</label>
+                                <input type="text" class="form-control" id="signUpName" placeholder="Il tuo nome e cognome" required>
                             </div>
                             <div class="mb-3">
-                                <label for="regEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="regEmail" placeholder="Inserisci la tua email" required>
+                                <label for="signUpEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="signUpEmail" placeholder="Inserisci la tua email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="regPassword" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="regPassword" placeholder="Crea una password" required>
+                                <label for="signUpPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="signUpPassword" placeholder="Crea una password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ruolo</label>
+                                <div>
+                                    <input type="radio" id="roleUser" name="role" value="user" checked>
+                                    <label for="roleUser" class="form-label">Utente</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="roleSeller" name="role" value="seller">
+                                    <label for="roleSeller" class="form-label">Artigiano</label>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <a href="login.html" class="text-decoration-none">hai già un account? Accedi</a>
                             </div>
                             <button type="submit" class="btn btn-success w-100">Registrati</button>
                         </form>
+                        <script src="scripts/signup.js"></script>
+                        <div id="signUpStatus"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>    
 </body>
 </html>

@@ -8,7 +8,10 @@ const createApp = async (app, cb) => {
     await setupDb();
     
     app.use(express.json());
-    app.use(cors());
+    app.use(cors({
+        origin: 'http://localhost:3100',
+        credentials: true
+    }));
     app.use(express.static('../frontend/public'));
 
     // Register routes
