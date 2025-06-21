@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/api/v1/users/login', async (req, res) => {
 
     const {email, password} = req.body;
-    console.log('Login request body:', req.body);
+    //console.log('Login request body:', req.body);
     if (!email || !password) {
         return res.status(400).json({
             status: 'error',
@@ -19,7 +19,7 @@ router.post('/api/v1/users/login', async (req, res) => {
     try {
         // Check if user exists
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        console.log('User query result:', rows);
+        //console.log('User query result:', rows);
         if(rows.length === 0)
             return res.status(401).json({
                 status: 'error',
@@ -61,6 +61,14 @@ router.post('/api/v1/users/signup', async (req, res) => {
         //console.log('Headers:', req.headers);
         const { fullname , email, password, role } = req.body;
         //console.log('Signup request body:', req.body);
+
+        const banned = await pool.query('SELECT email FROM banned_emails WHERE email = $1',[email]);
+        if (banned.rows.length > 0) {
+            return res.status(403).json({
+                status: 'error',
+                message: 'This email is banned'
+            });
+        }
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if(rows.length > 0)
             return res.status(401).json({
@@ -146,10 +154,9 @@ router.post('/api/v1/users/reset-password', async (req, res) => {
             });
         }
 
-        const user = rows[0];
         const hashedPassword = hash_salt_pepper(newPassword, email);
 
-        await pool.query('UPDATE users SET password = $1 WHERE id = $2', [hashedPassword, user.id]);
+        await pool.query('UPDATE users SET password_hash = $1 WHERE email = $2', [hashedPassword, email]);
 
         res.status(200).json({
             status: 'success',

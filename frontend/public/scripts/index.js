@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateAuthUI();
     
     // Add event listener for logout if needed
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', (e) => {
         if (e.target.id === 'logoutBtn') {
             e.preventDefault();
             logoutUser();
@@ -28,7 +28,7 @@ function logoutUser() {
 }
 
 async function updateAuthUI() {
-    const authDropdown = document.getElementById('profileDropdownMenu');
+    const authDropdown = document.getElementById('authDropdown');
     if (!authDropdown) return;
 
     try {
@@ -36,18 +36,31 @@ async function updateAuthUI() {
         const isAuthenticated = await verifyToken();
         
         if (isAuthenticated) {
-            // User is logged in
+            // Get user from localStorage after verification
             const user = JSON.parse(localStorage.getItem('user'));
-            authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="profilo.html">Il mio profilo</a></li>
+            
+            if (user.role === "seller") {
+                authDropdown.innerHTML = `
+                <li><a class="dropdown-item" href="profiloVenditore.html">Opzioni venditore</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
-            `;
+                `;
+            } else if( user.role === "admin") {
+                authDropdown.innerHTML = `
+                <li><a class="dropdown-item" href="admin.html">Opzioni admin</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
+                `;
+            }else{
+                // Default logged in user
+                authDropdown.innerHTML = `<li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>`;
+            }
         } else {
             // User is not logged in
             authDropdown.innerHTML = `
                 <li><a class="dropdown-item" href="login.html">Login</a></li>
-                <li><a class="dropdown-item" href="registrazione.html">Registrati</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="sign-up.html">Registrati</a></li>
             `;
         }
     } catch (error) {
@@ -55,7 +68,7 @@ async function updateAuthUI() {
         // Fallback to not logged in
         authDropdown.innerHTML = `
             <li><a class="dropdown-item" href="login.html">Login</a></li>
-            <li><a class="dropdown-item" href="registrazione.html">Registrati</a></li>
+            <li><a class="dropdown-item" href="sign-up.html">Registrati</a></li>
         `;
     }
 }

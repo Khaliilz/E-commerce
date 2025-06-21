@@ -1,8 +1,8 @@
 /* Mock data */
 INSERT INTO users (fullname, email, password_hash, role) VALUES
-('Giovanni','admin@example.com', 'admin_password_hash', 'admin'),
-('Alberto','user@example.com', 'user_password_hash', 'user'),
-('Pietrellico','seller@example.com', 'seller_password_hash', 'seller');
+('admin','admin@example.com', 'f3ad86f9661e6bb662908556a3d34be534175d9db922b801922e17cf27e3bb89', 'admin'),
+('user','user@example.com', '872ccea818dd938facd03b3b7cd9fb080bb287421cc722232cf86a2c9af38113', 'user'),
+('seller','seller@example.com', '46ed65a631d0a7742ba4372b2419f4fcee4003c7c4478a98bcb802b96bce551a', 'seller');
 
 INSERT INTO products (seller_id, name, description, price, stock, image_base64) VALUES
 (3, 'Product 1', 'Description for product 1', 19.99, 100, 'base64_image_1'),

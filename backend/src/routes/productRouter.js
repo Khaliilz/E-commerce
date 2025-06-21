@@ -85,12 +85,6 @@ router.get('/api/v1/products/search', async (req, res) => {
 });
 
 router.post('/api/v1/products', authed, async (req, res) => {
-    if (!req.user || req.user.role !== 'seller') {
-        return res.status(403).json({
-            status: 'error',
-            message: 'Forbidden: Only sellers can add products'
-        });
-    }
 
     const { name, description, price, stock, image } = req.body;
 
@@ -120,5 +114,24 @@ router.post('/api/v1/products', authed, async (req, res) => {
         });
     }
 });
+
+router.get('/api/v1/seller/products', authed, async (req, res) => {
+    try {
+        const { rows } = await pool.query('SELECT * FROM products WHERE seller_id = $1', [req.user.id]);
+        res.status(200).json({
+            status: 'success',
+            data: {
+                products: rows
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching seller products:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
+        });
+    }
+});
+
 
 module.exports = router;

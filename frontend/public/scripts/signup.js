@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('token', token);
                     localStorage.setItem('user', JSON.stringify(responseData.user));
                     
-                    // Update UI and redirect
-                    window.location.href = 'index.html'; // Redirect to home after registration
+                    window.location.href = 'index.html';
                 } else {
                     const errorData = await response.json();
                     document.getElementById('signUpStatus').innerText = errorData.message;

@@ -3,6 +3,8 @@ const cors = require('cors');
 const { orderRouter, productRouter, userRouter, adminRouter } = require('./routes');
 const { APP_PORT } = require('./config');
 const { setupDb } = require('./db');
+const path = require('path');
+
 
 const createApp = async (app, cb) => {
     await setupDb();
@@ -12,6 +14,7 @@ const createApp = async (app, cb) => {
         origin: 'http://localhost:3100',
         credentials: true
     }));
+    
     app.use(express.static('../frontend/public'));
 
     // Register routes
