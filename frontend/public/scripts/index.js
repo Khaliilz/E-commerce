@@ -39,19 +39,25 @@ async function updateAuthUI() {
             // Get user from localStorage after verification
             const user = JSON.parse(localStorage.getItem('user'));
             
-            if (user.role === "seller") {
+            if (user.role === "user") {
                 authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="profiloVenditore.html">Opzioni venditore</a></li>
+                <li><a class="dropdown-item" href="profiloUser.html">Opzioni</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
                 `;
             } else if( user.role === "admin") {
                 authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="admin.html">Opzioni admin</a></li>
+                <li><a class="dropdown-item" href="profiloAdmin.html">Opzioni</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
                 `;
-            }else{
+            } else if( user.role === "seller") {
+                authDropdown.innerHTML = `
+                <li><a class="dropdown-item" href="profiloVenditore.html">Opzioni</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
+                `;
+            } else {
                 // Default logged in user
                 authDropdown.innerHTML = `<li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>`;
             }

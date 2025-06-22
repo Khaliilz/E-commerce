@@ -1,8 +1,65 @@
 const express = require('express');
 const { pool } = require('../db');
 const { authed } = require('../middleware/index.js');
-const req = require('express/lib/request.js');
+const uploadProductImage = require('../middleware/upload');
+const fs = require('fs');
 const router = express.Router();
+
+router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => {
+    try {
+        console.log('Body:', req.body);     // Log body
+        console.log('File:', req.file);   // Log file
+
+        const {
+            productName: name,
+            productDescription: description,
+            productPrice: price,
+            productStock: stock
+        } = req.body;
+        const sellerId = req.user.id;
+        const image = req.file;
+
+        // Validate inputs
+        if (!name || !description || !price || !stock || !image) {
+            // Clean up uploaded files if validation fails
+            if (image) {
+                fs.unlinkSync(path.join(__dirname, '../public/uploads', image.filename));
+            }
+            return res.status(400).json({
+                status: 'error',
+                message: 'All fields including image are required'
+            });
+        }
+
+        const imagePath = `/uploads/${image.filename}`;
+
+        // Insert into database
+        const { rows } = await pool.query(
+            'INSERT INTO products (seller_id, name, description, price, stock, image_path) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [sellerId, name, description, price, stock, imagePath]
+        );
+
+        res.status(201).json({
+            status: 'success',
+            data: {
+                product: rows[0]
+            }
+        });
+
+    } catch (error) {
+        console.error('Error adding product:', error);
+        
+        // Clean up uploaded files on error
+        if (req.files) {
+            req.files.forEach(file => fs.unlinkSync(file.path));
+        }
+
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
+        });
+    }
+});
 
 router.get('/api/v1/products', async (req, res) => {
     try {
@@ -84,44 +141,18 @@ router.get('/api/v1/products/search', async (req, res) => {
     }
 });
 
-router.post('/api/v1/products', authed, async (req, res) => {
-
-    const { name, description, price, stock, image } = req.body;
-
-    if (!name || !description || !price || !stock || !image) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'All fields are required'
-        });
-    }
-
-    const query = 'INSERT INTO products (name, seller_id, description, price, stock, image_base64) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-    const values = [name, req.user.id, description, price, stock, image];
-
-    try {
-        const { rows } = await pool.query(query, values);
-        res.status(201).json({
-            status: 'success',
-            data: {
-                product: rows[0]
-            }
-        });
-    } catch (error) {
-        console.error('Error adding product:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal Server Error'
-        });
-    }
-});
-
 router.get('/api/v1/seller/products', authed, async (req, res) => {
     try {
         const { rows } = await pool.query('SELECT * FROM products WHERE seller_id = $1', [req.user.id]);
+        // Prepend host if needed
+        const products = rows.map(p => ({
+            ...p,
+            image_url: p.image_path ? `http://localhost:3000${p.image_path}` : null
+        }));
         res.status(200).json({
             status: 'success',
             data: {
-                products: rows
+                products
             }
         });
     } catch (error) {
@@ -132,6 +163,5 @@ router.get('/api/v1/seller/products', authed, async (req, res) => {
         });
     }
 });
-
 
 module.exports = router;

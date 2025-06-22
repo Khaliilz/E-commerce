@@ -4,18 +4,25 @@ const { orderRouter, productRouter, userRouter, adminRouter } = require('./route
 const { APP_PORT } = require('./config');
 const { setupDb } = require('./db');
 const path = require('path');
-
+    const fs = require('fs');
 
 const createApp = async (app, cb) => {
     await setupDb();
     
+    const uploadPath = path.join(__dirname, 'public/uploads');
+    if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    app.use('/uploads', express.static(uploadPath));
+
     app.use(express.json());
     app.use(cors({
         origin: 'http://localhost:3100',
         credentials: true
     }));
-    
-    app.use(express.static('../frontend/public'));
+
+    app.use('/static', express.static(path.join(__dirname, '../frontend/public')));
+
 
     // Register routes
     app.use(orderRouter);

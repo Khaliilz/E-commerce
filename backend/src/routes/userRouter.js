@@ -156,6 +156,13 @@ router.post('/api/v1/users/reset-password', async (req, res) => {
 
         const hashedPassword = hash_salt_pepper(newPassword, email);
 
+        if( hashedPassword === rows[0].password_hash) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'New password cannot be the same as the old password'
+            });
+        }
+
         await pool.query('UPDATE users SET password_hash = $1 WHERE email = $2', [hashedPassword, email]);
 
         res.status(200).json({

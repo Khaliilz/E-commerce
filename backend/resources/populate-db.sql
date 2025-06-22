@@ -4,10 +4,10 @@ INSERT INTO users (fullname, email, password_hash, role) VALUES
 ('user','user@example.com', '872ccea818dd938facd03b3b7cd9fb080bb287421cc722232cf86a2c9af38113', 'user'),
 ('seller','seller@example.com', '46ed65a631d0a7742ba4372b2419f4fcee4003c7c4478a98bcb802b96bce551a', 'seller');
 
-INSERT INTO products (seller_id, name, description, price, stock, image_base64) VALUES
-(3, 'Product 1', 'Description for product 1', 19.99, 100, 'base64_image_1'),
-(3, 'Product 2', 'Description for product 2', 29.99, 50, 'base64_image_2'),
-(3, 'Product 3', 'Description for product 3', 39.99, 25, 'base64_image_3');
+INSERT INTO products (seller_id, name, description, price, stock, image_path) VALUES
+(3, 'Product 1', 'Description for product 1', 19.99, 100, '/uploads/makina.jpg'),
+(3, 'Product 2', 'Description for product 2', 29.99, 50, '/uploads/makina.jpg'),
+(3, 'Product 3', 'Description for product 3', 39.99, 25, '/uploads/makina.jpg');
 
 INSERT INTO orders (user_id, total, status) VALUES
 (2, 59.97, 'completed'),

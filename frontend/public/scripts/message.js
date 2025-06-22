@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('token', token);
                     localStorage.setItem('user', JSON.stringify(responseData.user));
                     
-                    window.location.href = 'admin.html';
+                    window.location.href = 'profiloAdmin.html';
                 } else {
                     const errorData = await response.json();
                     document.getElementById('messageStatus').innerText = errorData.message;

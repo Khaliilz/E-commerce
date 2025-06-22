@@ -28,6 +28,8 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    volumes:
+      - ./backend/public/uploads:/app/src/public/uploads
     networks:
       - app-network
 

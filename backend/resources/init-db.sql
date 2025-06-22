@@ -13,7 +13,7 @@ CREATE TABLE products (
     description TEXT,
     price NUMERIC(10,2) NOT NULL,
     stock INTEGER NOT NULL DEFAULT 0,
-    image_base64 TEXT NOT NULL
+    image_path VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE basket_products (

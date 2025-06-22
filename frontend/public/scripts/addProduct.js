@@ -5,51 +5,46 @@ document.addEventListener('DOMContentLoaded', function() {
         addProductForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const name = document.getElementById('productName').value;
-            const description = document.getElementById('productDescription').value;
-            const price = document.getElementById('productPrice').value;
-            const stock = document.getElementById('productStock').value;
-            const imageInput = document.getElementById('productImages');
-            let image = '';
-            if (imageInput && imageInput.files && imageInput.files[0]) {
-                const file = imageInput.files[0];
-                image = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
-            }
-            
+            const submitBtn = addProductForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Caricamento...
+            `;
+
             try {
+                const formData = new FormData(addProductForm);
+                const token = localStorage.getItem('token');
+                
+                if (!token) throw new Error('Devi effettuare il login');
+                if (!formData.get('productImage')) throw new Error('Seleziona un\'immagine');
+
                 const response = await fetch('http://localhost:3000/api/v1/products', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({
-                        name,
-                        description,
-                        price,
-                        stock,
-                        image
-                    })
+                    body: formData
                 });
-                
-                if (response.ok) {
-                    const responseData = await response.json();
-                    
-                    const token = response.headers.get('Authorization').split(' ')[1];
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(responseData.user));
-                    
-                    window.location.href = 'index.html';
-                } else {
+
+                if (!response.ok) {
                     const errorData = await response.json();
-                    document.getElementById('addProductStatus').innerText = errorData.message;
+                    throw new Error(errorData.message || 'Errore durante l\'aggiunta del prodotto');
                 }
+
+                window.location.href = 'myProducts.html';
+
             } catch (error) {
                 console.error('Add product error:', error);
+                const errorElement = document.getElementById('addProductStatus') || document.createElement('div');
+                errorElement.id = 'addProductStatus';
+                errorElement.className = 'alert alert-danger mt-3';
+                errorElement.textContent = error.message;
+                addProductForm.appendChild(errorElement);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         });
     }
