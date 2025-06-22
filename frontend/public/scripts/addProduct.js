@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (error) {
         console.error('Failed to load categories:', error);
     }
+    
     const addProductForm = document.getElementById('addProductForm');
     
     if (addProductForm) {
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 
                 if (!token) throw new Error('Devi effettuare il login');
                 if (!formData.get('productImage')) throw new Error('Seleziona un\'immagine');
-
+                
                 const response = await fetch('http://localhost:3000/api/v1/products', {
                     method: 'POST',
                     headers: {

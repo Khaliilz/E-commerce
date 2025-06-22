@@ -90,6 +90,35 @@ router.get('/api/v1/products', async (req, res) => {
     }
 });
 
+router.get('/api/v1/category/:categoryId/products', async (req, res) => {
+    const {categoryId} = req.params;
+
+    try {
+        const { rows } = await pool.query(
+            `SELECT p.*, c.name as category_name 
+            FROM products p
+            JOIN product_categories pc ON p.id = pc.product_id
+            JOIN categories c ON pc.category_id = c.id
+            WHERE pc.category_id = $1
+            ORDER BY p.name`,
+            [categoryId]
+        );
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                products: rows
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
+        });
+    }
+});
+
 router.get('/api/v1/categories', async (req, res) => {
     try {
         const { rows } = await pool.query('SELECT * FROM categories');
@@ -108,11 +137,46 @@ router.get('/api/v1/categories', async (req, res) => {
     }
 });
 
-router.get('/api/v1/products/:id', async (req, res) => {
+router.post('/api/v1/newCategory', authed, async (req, res) => {
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Category name is required'
+        });
+    }
+    try {
+        const { rows } = await pool.query(
+            'INSERT INTO categories (name) VALUES ($1) RETURNING *',
+            [name]
+        );
+        res.status(201).json({
+            status: 'success',
+            data: {
+                category: rows[0]
+            }
+        });
+    } catch (error) {
+        console.error('Error adding category:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
+        });
+    }
+});
+
+router.get('/api/v1/product/:id', async (req, res) => {
     const productId = req.params.id;
 
     try {
-        const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [productId]);
+        const { rows } = await pool.query(`
+            SELECT p.*, c.name as category_name 
+            FROM products p
+            LEFT JOIN product_categories pc ON p.id = pc.product_id
+            LEFT JOIN categories c ON pc.category_id = c.id
+            WHERE p.id = $1`, [productId]
+        );
+
         if (rows.length === 0) {
             return res.status(404).json({
                 status: 'error',
