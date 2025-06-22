@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const responseData = await response.json();
                     
                     const token = response.headers.get('Authorization').split(' ')[1];
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(responseData.user));
+                    sessionStorage.setItem('token', token);
+                    sessionStorage.setItem('user', JSON.stringify(responseData.user));
                     
                     window.location.href = 'index.html';
                 } else {

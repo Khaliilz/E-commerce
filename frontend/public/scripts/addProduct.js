@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 const formData = new FormData(addProductForm);
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 
                 if (!token) throw new Error('Devi effettuare il login');
                 if (!formData.get('productImage')) throw new Error('Seleziona un\'immagine');

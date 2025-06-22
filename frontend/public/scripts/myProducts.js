@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             method: 'GET',  // Changed from POST to GET
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`  // Added auth header
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`  // Added auth header
             }
         });
         
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const productCard = `
                         <div class="col">
                             <div class="card h-100">
-                                <img src="${product.image_url || 'placeholder.jpg'}" class="card-img-top" alt="${product.name}">
+                                <img src="${product.image_path ? 'http://localhost:3000' + product.image_path : 'placeholder.jpg'}" class="card-img-top" alt="${product.name}">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text fw-bold">€${Number(product.price).toFixed(2)}</p>

@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => {
     try {
-        console.log('Body:', req.body);     // Log body
-        console.log('File:', req.file);   // Log file
+        //console.log('Body:', req.body);
+        //console.log('File:', req.file);
 
         const {
             productName: name,
@@ -19,7 +19,6 @@ router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => 
         const sellerId = req.user.id;
         const image = req.file;
 
-        // Validate inputs
         if (!name || !description || !price || !stock || !image) {
             // Clean up uploaded files if validation fails
             if (image) {
@@ -33,7 +32,6 @@ router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => 
 
         const imagePath = `/uploads/${image.filename}`;
 
-        // Insert into database
         const { rows } = await pool.query(
             'INSERT INTO products (seller_id, name, description, price, stock, image_path) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
             [sellerId, name, description, price, stock, imagePath]
@@ -48,7 +46,6 @@ router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => 
 
     } catch (error) {
         console.error('Error adding product:', error);
-        
         // Clean up uploaded files on error
         if (req.files) {
             req.files.forEach(file => fs.unlinkSync(file.path));
@@ -90,7 +87,6 @@ router.get('/api/v1/products/:id', async (req, res) => {
                 message: 'Product not found'
             });
         }
-
         res.status(200).json({
             status: 'success',
             data: {

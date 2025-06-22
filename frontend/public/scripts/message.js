@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
                     },
                     body: JSON.stringify({
                         targetuserEmail: userEmail,
@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     const responseData = await response.json();
                     
                     const token = response.headers.get('Authorization').split(' ')[1];
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(responseData.user));
+                    sessionStorage.setItem('token', token);
+                    sessionStorage.setItem('user', JSON.stringify(responseData.user));
                     
                     window.location.href = 'profiloAdmin.html';
                 } else {

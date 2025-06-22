@@ -11,18 +11,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function isLoggedIn() {
-    // Check for token in localStorage or cookie
-    return localStorage.getItem('token') !== null;
+    return sessionStorage.getItem('token') !== null;
 }
 
 function getToken() {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
 }
 
 function logoutUser() {
     // Clear the token and user data
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     updateAuthUI();
     window.location.href = 'index.html';
 }
@@ -36,8 +35,8 @@ async function updateAuthUI() {
         const isAuthenticated = await verifyToken();
         
         if (isAuthenticated) {
-            // Get user from localStorage after verification
-            const user = JSON.parse(localStorage.getItem('user'));
+            // Get user from sessionStorage after verification
+            const user = JSON.parse(sessionStorage.getItem('user'));
             
             if (user.role === "user") {
                 authDropdown.innerHTML = `
@@ -93,7 +92,7 @@ async function verifyToken() {
 
         if (response.ok) {
             const data = await response.json();
-            localStorage.setItem('user', JSON.stringify(data.user));
+            sessionStorage.setItem('user', JSON.stringify(data.user));
             return true;
         }
         return false;

@@ -9,7 +9,7 @@ const path = require('path');
 const createApp = async (app, cb) => {
     await setupDb();
     
-    const uploadPath = path.join(__dirname, 'public/uploads');
+    const uploadPath = path.join(__dirname, '../public/uploads');
     if (!fs.existsSync(uploadPath)) {
         fs.mkdirSync(uploadPath, { recursive: true });
     }
