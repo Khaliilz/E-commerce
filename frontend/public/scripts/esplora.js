@@ -2,11 +2,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const productsContainer = document.querySelector('.row');
     
     try {
-        const response = await fetch('http://localhost:3000/api/v1/seller/products', {
+        const response = await fetch('http://localhost:3000/api/v1/products', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`  // Added auth header
             }
         });
         

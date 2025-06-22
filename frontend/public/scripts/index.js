@@ -40,19 +40,19 @@ async function updateAuthUI() {
             
             if (user.role === "user") {
                 authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="profiloUser.html">Opzioni</a></li>
+                <li><a class="dropdown-item" href="profiloUser.html">La tua area</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
                 `;
             } else if( user.role === "admin") {
                 authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="profiloAdmin.html">Opzioni</a></li>
+                <li><a class="dropdown-item" href="profiloAdmin.html">La tua area</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
                 `;
             } else if( user.role === "seller") {
                 authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="profiloVenditore.html">Opzioni</a></li>
+                <li><a class="dropdown-item" href="profiloVenditore.html">La tua area</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
                 `;

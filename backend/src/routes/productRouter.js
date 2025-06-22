@@ -14,12 +14,13 @@ router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => 
             productName: name,
             productDescription: description,
             productPrice: price,
-            productStock: stock
+            productStock: stock,
+            productCategory: categoryId
         } = req.body;
         const sellerId = req.user.id;
         const image = req.file;
 
-        if (!name || !description || !price || !stock || !image) {
+        if (!name || !description || !price || !stock || !image || !categoryId) {
             // Clean up uploaded files if validation fails
             if (image) {
                 fs.unlinkSync(path.join(__dirname, '../public/uploads', image.filename));
@@ -32,10 +33,22 @@ router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => 
 
         const imagePath = `/uploads/${image.filename}`;
 
+        await pool.query('BEGIN');
+
         const { rows } = await pool.query(
             'INSERT INTO products (seller_id, name, description, price, stock, image_path) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
             [sellerId, name, description, price, stock, imagePath]
         );
+
+        const productId = rows[0].id;
+
+        await pool.query(
+            `INSERT INTO product_categories (product_id, category_id)
+             VALUES ($1, $2)`,
+            [productId, categoryId]
+        );
+
+        await pool.query('COMMIT');
 
         res.status(201).json({
             status: 'success',
@@ -45,6 +58,7 @@ router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => 
         });
 
     } catch (error) {
+        await pool.query('ROLLBACK');
         console.error('Error adding product:', error);
         // Clean up uploaded files on error
         if (req.files) {
@@ -69,6 +83,24 @@ router.get('/api/v1/products', async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching products:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error'
+        });
+    }
+});
+
+router.get('/api/v1/categories', async (req, res) => {
+    try {
+        const { rows } = await pool.query('SELECT * FROM categories');
+        res.status(200).json({
+            status: 'success',
+            data: {
+                categories: rows
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching categories:', error);
         res.status(500).json({
             status: 'error',
             message: 'Internal Server Error'

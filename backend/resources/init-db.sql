@@ -16,6 +16,17 @@ CREATE TABLE products (
     image_path VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE product_categories (
+    product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+    category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,
+    PRIMARY KEY (product_id, category_id)
+);
+
 CREATE TABLE basket_products (
     id SERIAL PRIMARY KEY,
     basket_id INTEGER REFERENCES users(id) ON DELETE CASCADE,

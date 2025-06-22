@@ -1,10 +1,27 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('http://localhost:3000/api/v1/categories');
+        if (response.ok) {
+            const { data } = await response.json();
+            const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Seleziona una categoria</option>';
+                    
+            data.categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Failed to load categories:', error);
+    }
     const addProductForm = document.getElementById('addProductForm');
     
     if (addProductForm) {
         addProductForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const submitBtn = addProductForm.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
             submitBtn.disabled = true;
@@ -27,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: formData
                 });
-
+                
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || 'Errore durante l\'aggiunta del prodotto');
