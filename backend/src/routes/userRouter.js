@@ -102,7 +102,7 @@ router.post('/api/v1/users/signup', async (req, res) => {
                 message: 'User already exists'
         });
 
-        const newUser = await pool.query('INSERT INTO users (fullname, email, password_hash, role, description) VALUES ($1, $2, $3, $4, $5) RETURNING *', [fullname, email, hash_salt_pepper(password, email), role, null]);
+        const newUser = await pool.query('INSERT INTO users (fullname, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING *', [fullname, email, hash_salt_pepper(password, email), role]);
             
         res.setHeader('Access-Control-Expose-Headers', 'Authorization');
         res.setHeader('Authorization', `Bearer ${createToken(newUser.rows[0])}`);

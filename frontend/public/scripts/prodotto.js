@@ -25,16 +25,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             stockElement.innerHTML = product.stock > 0 ? `<span class="text-success">Disponibile (${product.stock} pezzi)</span>` : '<span class="text-danger">Esaurito</span>';
             
             const imgElement = document.getElementById('product-image');
-            /*const imageUrl = product.image_path ? `http://localhost:3000${product.image_path}` : 'http://localhost:3000/uploads/placeholder.png';
-            imgElement.src = imageUrl;
             
-            imgElement.onerror = () => {
-                console.warn('Image failed to load, using placeholder');
-                imgElement.src = 'http://localhost:3000/uploads/placeholder.png';
-            };
-
-            console.log('Product page updated successfully');*/
-            const spinner = document.getElementById('image-spinner'); // The loading spinner
+            const spinner = document.getElementById('image-spinner');
             
             if (product.image_path) {
                 const imageUrl = `http://localhost:3000${product.image_path}`;

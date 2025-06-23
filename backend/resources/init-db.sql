@@ -4,7 +4,8 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     role VARCHAR(50) CHECK (role IN ('user', 'seller', 'admin')) DEFAULT 'user',
-    description VARCHAR(255) DEFAULT NULL
+    description VARCHAR(255) DEFAULT NULL,
+    last_cart_edit TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE products (
@@ -28,12 +29,12 @@ CREATE TABLE product_categories (
     PRIMARY KEY (product_id, category_id)
 );
 
-CREATE TABLE basket_products (
+CREATE TABLE cart_products (
     id SERIAL PRIMARY KEY,
-    basket_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    cart_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     product_id INTEGER REFERENCES products(id),
     quantity INTEGER NOT NULL DEFAULT 1,
-    UNIQUE (basket_id, product_id)
+    UNIQUE (cart_id, product_id)
 );
 
 CREATE TABLE orders (
