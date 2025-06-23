@@ -3,7 +3,8 @@ CREATE TABLE users (
     fullname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
-    role VARCHAR(50) CHECK (role IN ('user', 'seller', 'admin')) DEFAULT 'user'
+    role VARCHAR(50) CHECK (role IN ('user', 'seller', 'admin')) DEFAULT 'user',
+    description VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE products (

@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const token = sessionStorage.getItem('token');
                 
                 if (!token) throw new Error('Devi effettuare il login');
-                if (!formData.get('productImage')) throw new Error('Seleziona un\'immagine');
+                if (!formData.get('iconImage')) throw new Error('Seleziona un\'immagine');
                 
                 const response = await fetch('http://localhost:3000/api/v1/products', {
                     method: 'POST',

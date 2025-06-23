@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetPasswordForm = document.getElementById('resetPasswordForm');
     
     if (resetPasswordForm) {
-        resetPasswordForm.addEventListener('submit', async function(e) {
+        resetPasswordForm.addEventListener('submitPassword', async function(e) {
             e.preventDefault();
 
             const userEmail = document.getElementById('userEmail').value.trim().toLowerCase();

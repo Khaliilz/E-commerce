@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
+    const loginStatus = document.getElementById('loginStatus');
     
     if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-            const password = document.getElementById('loginPassword').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            loginStatus.textContent = '';
+            loginStatus.style.color = '';
 
             try {
                 const response = await fetch('http://localhost:3000/api/v1/users/login', {
@@ -15,11 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email,
+                        email: email.toLowerCase(),
                         password
                     })
                 });
-                
+
                 if (response.ok) {
                     const responseData = await response.json();
                     
@@ -29,11 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     window.location.href = 'index.html';
                 } else {
-                    const errorData = await response.json();
-                    document.getElementById('loginStatus').innerText = errorData.message;
+                    loginStatus.innerText = responseData.message || 'Login failed';
+                    loginStatus.style.color = 'red';
                 }
             } catch (error) {
                 console.error('Login error:', error);
+                loginStatus.innerText = 'An error occurred during login';
+                loginStatus.style.color = 'red';
             }
         });
     }

@@ -31,8 +31,8 @@ const upload = multer({
     }
 });
 
-const uploadProductImage = (req, res, next) => {
-  upload.single('productImage')(req, res, (err) => {
+const uploadImage = (req, res, next) => {
+  upload.single('iconImage')(req, res, (err) => {
     if (err) {
       return res.status(400).json({
         status: 'error',
@@ -43,4 +43,4 @@ const uploadProductImage = (req, res, next) => {
   });
 };
 
-module.exports = uploadProductImage;
+module.exports = uploadImage;

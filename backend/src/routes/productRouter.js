@@ -1,11 +1,11 @@
 const express = require('express');
 const { pool } = require('../db');
 const { authed } = require('../middleware/index.js');
-const uploadProductImage = require('../middleware/upload');
+const uploadImage = require('../middleware/upload');
 const fs = require('fs');
 const router = express.Router();
 
-router.post('/api/v1/products', authed, uploadProductImage, async (req, res) => {
+router.post('/api/v1/products', authed, uploadImage, async (req, res) => {
     try {
         //console.log('Body:', req.body);
         //console.log('File:', req.file);
@@ -233,9 +233,9 @@ router.get('/api/v1/products/search', async (req, res) => {
     }
 });
 
-router.get('/api/v1/seller/products', authed, async (req, res) => {
+router.get('/api/v1/products/seller/:id', async (req, res) => {
     try {
-        const { rows } = await pool.query('SELECT * FROM products WHERE seller_id = $1', [req.user.id]);
+        const { rows } = await pool.query('SELECT * FROM products WHERE seller_id = $1', [req.params.id]);
         // Prepend host if needed
         const products = rows.map(p => ({
             ...p,

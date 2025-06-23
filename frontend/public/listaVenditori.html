@@ -8,6 +8,7 @@
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
         <link rel="stylesheet" href="style.css">
         <script src="scripts/index.js" defer></script>
+        <script src="scripts/listaVenditori.js" defer></script>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -28,12 +29,6 @@
                         <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="index.html">
                             <i class="bi bi-house fs-4"></i>
                             <span class="visually-hidden">Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item mb-3 d-flex justify-content-center">
-                        <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="preferiti.html">
-                            <i class="bi bi-heart fs-4"></i>
-                            <span class="visually-hidden">Preferiti</span>
                         </a>
                     </li>
                     <li class="nav-item mb-3 d-flex justify-content-center">
@@ -61,54 +56,9 @@
                 </ul>
             </nav>
             <main class="flex-grow-1" style="margin-left: 75px; padding: 2rem;">
-                <!-- Contenuto principale qui -->
-                <div class="container">
-                    <h2 class="mb-4">I tuoi Preferiti</h2>
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                        <div class="col">
-                            <div class="card h-100">
-                                <img src="img/prodotto1.jpg" class="card-img-top" alt="Prodotto 1" style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Prodotto Verde</h5>
-                                    <p class="card-text text-muted">Un prodotto naturale per la tua casa</p>
-                                    <p class="card-text fw-bold">€19,99</p>
-                                    <a href="prodotto.html" class="btn btn-primary">Dettagli</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100">
-                                <img src="img/prodotto2.jpg" class="card-img-top" alt="Prodotto 2" style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tech Gadget</h5>
-                                    <p class="card-text text-muted">Innovazione a portata di mano</p>
-                                    <p class="card-text fw-bold">€49,99</p>
-                                    <a href="prodotto.html" class="btn btn-primary">Dettagli</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100">
-                                <img src="img/prodotto3.jpg" class="card-img-top" alt="Prodotto 3" style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Cuscino Comfort</h5>
-                                    <p class="card-text text-muted">Per i tuoi momenti di relax</p>
-                                    <p class="card-text fw-bold">€14,99</p>
-                                    <a href="prodotto.html" class="btn btn-primary">Dettagli</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card h-100">
-                                <img src="img/prodotto4.jpg" class="card-img-top" alt="Prodotto 4" style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">T-shirt Fashion</h5>
-                                    <p class="card-text text-muted">Stile unico per ogni occasione</p>
-                                    <p class="card-text fw-bold">€24,99</p>
-                                    <a href="prodotto.html" class="btn btn-primary">Dettagli</a>
-                                </div>
-                            </div>
-                        </div>
+                <div class="container"></div>
+                    <h2 class="mb-4">I nostri artigiani</h2>
+                    <div id="sellersList" class="list-group">
                     </div>
                 </div>
             </main>
