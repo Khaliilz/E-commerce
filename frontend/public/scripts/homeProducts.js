@@ -16,7 +16,7 @@ const loadCategoryPreview = async (categoryId, containerId, maxItems = 5) => {
             const img = document.createElement('img');
             img.src = product.image_path ? `http://localhost:3000${product.image_path}` : placeholderImage;
             img.alt = product.name;
-            img.style = 'height: 200px; width: auto; min-width: 120px; max-width: 200; object-fit: cover;';
+            img.style = 'height: 200px; width: auto; min-width: 120px; object-fit: cover;';
             img.onerror = () => { img.src = placeholderImage; };
 
             productLink.appendChild(img);
