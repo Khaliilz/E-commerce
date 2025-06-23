@@ -234,6 +234,15 @@ router.get('/api/v1/products/search', async (req, res) => {
 });
 
 router.get('/api/v1/products/seller/:id', async (req, res) => {
+    const sellerId = parseInt(req.params.id, 10);
+    
+    if (isNaN(sellerId)) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Invalid seller ID'
+        });
+    }
+    
     try {
         const { rows } = await pool.query('SELECT * FROM products WHERE seller_id = $1', [req.params.id]);
         // Prepend host if needed

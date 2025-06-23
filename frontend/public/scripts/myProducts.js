@@ -1,24 +1,30 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const productsContainer = document.querySelector('.row');
-    
+
     try {
-        const response = await fetch('http://localhost:3000/api/v1/seller/products', {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        
+        if (!user || !user.id) {
+            throw new Error('User not authenticated or missing ID');
+        }
+
+        const sellerId = user.id;
+
+        const response = await fetch(`http://localhost:3000/api/v1/products/seller/${sellerId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`  // Added auth header
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         });
         
         if (response.ok) {
-            const responseData = await response.json();
+            const { data } = await response.json();
             
-            // Clear the "No products" message
             productsContainer.innerHTML = '';
             
-            // Display each product
-            if (responseData.data.products.length > 0) {
-                responseData.data.products.forEach(product => {
+            if (data.products && data.products.length > 0) {
+                data.products.forEach(product => {
                     const placeholderImage = 'http://localhost:3000/uploads/placeholder.png';
                     const productCard = `
                         <div class="col">

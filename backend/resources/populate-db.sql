@@ -14,24 +14,24 @@ INSERT INTO categories (name) VALUES
 ('Bambole');           -- ID 4
 
 INSERT INTO products (seller_id, name, description, price, stock, image_path) VALUES
-(1, 'automobile1', 'Description for product 1', 19.99, 100, '/uploads/automobile1.jpg'),  -- ID 1
-(1, 'automobile2', 'Description for product 2', 29.99, 50, '/uploads/automobile2.jpg'),   -- ID 2
-(1, 'automobile3', 'Description for product 3', 39.99, 25, '/uploads/automobile3.jpg'),   -- ID 3
-(1, 'automobile4', 'Description for product 4', 19.99, 100, '/uploads/automobile4.jpg'),  -- ID 4 ...
-(2, 'bambole1', 'Description for product 1', 19.99, 100, '/uploads/bambole1.jpg'),
-(2, 'bambole2', 'Description for product 2', 29.99, 50, '/uploads/bambole2.jpg'),
-(2, 'bambole3', 'Description for product 3', 39.99, 25, '/uploads/bambole3.jpg'),
-(2, 'bambole4', 'Description for product 4', 19.99, 100, '/uploads/bambole4.jpg'),
-(3, 'carteDaGioco1', 'Description for product 1', 19.99, 100, '/uploads/carteDaGioco1.jpg'),
-(3, 'carteDaGioco2', 'Description for product 2', 29.99, 50, '/uploads/carteDaGioco2.jpg'),
-(3, 'carteDaGioco3', 'Description for product 3', 39.99, 25, '/uploads/carteDaGioco3.jpg'),
-(3, 'carteDaGioco4', 'Description for product 4', 19.99, 100, '/uploads/carteDaGioco4.jpg'),
-(3, 'carteDaGioco5', 'Description for product 5', 29.99, 50, '/uploads/carteDaGioco5.jpg'),
-(3, 'carteDaGioco6', 'Description for product 6', 39.99, 25, '/uploads/carteDaGioco6.jpg'),
-(4, 'giocoDaTavolo1', 'Description for product 1', 19.99, 100, '/uploads/giocoDaTavolo1.jpg'),
-(4, 'giocoDaTavolo2', 'Description for product 2', 29.99, 50, '/uploads/giocoDaTavolo2.jpg'),
-(4, 'giocoDaTavolo3', 'Description for product 3', 39.99, 25, '/uploads/giocoDaTavolo3.jpg'),
-(4, 'giocoDaTavolo4', 'Description for product 4', 19.99, 100, '/uploads/giocoDaTavolo4.jpg');
+(3, 'automobile1', 'Description for product 1', 19.99, 100, '/uploads/automobile1.jpg'),  -- ID 1
+(3, 'automobile2', 'Description for product 2', 29.99, 50, '/uploads/automobile2.jpg'),   -- ID 2
+(3, 'automobile3', 'Description for product 3', 39.99, 25, '/uploads/automobile3.jpg'),   -- ID 3
+(3, 'automobile4', 'Description for product 4', 19.99, 100, '/uploads/automobile4.jpg'),  -- ID 4 ...
+(4, 'bambole1', 'Description for product 1', 19.99, 100, '/uploads/bambole1.jpg'),
+(4, 'bambole2', 'Description for product 2', 29.99, 50, '/uploads/bambole2.jpg'),
+(4, 'bambole3', 'Description for product 3', 39.99, 25, '/uploads/bambole3.jpg'),
+(4, 'bambole4', 'Description for product 4', 19.99, 100, '/uploads/bambole4.jpg'),
+(5, 'carteDaGioco1', 'Description for product 1', 19.99, 100, '/uploads/carteDaGioco1.jpg'),
+(5, 'carteDaGioco2', 'Description for product 2', 29.99, 50, '/uploads/carteDaGioco2.jpg'),
+(5, 'carteDaGioco3', 'Description for product 3', 39.99, 25, '/uploads/carteDaGioco3.jpg'),
+(5, 'carteDaGioco4', 'Description for product 4', 19.99, 100, '/uploads/carteDaGioco4.jpg'),
+(5, 'carteDaGioco5', 'Description for product 5', 29.99, 50, '/uploads/carteDaGioco5.jpg'),
+(5, 'carteDaGioco6', 'Description for product 6', 39.99, 25, '/uploads/carteDaGioco6.jpg'),
+(6, 'giocoDaTavolo1', 'Description for product 1', 19.99, 100, '/uploads/giocoDaTavolo1.jpg'),
+(6, 'giocoDaTavolo2', 'Description for product 2', 29.99, 50, '/uploads/giocoDaTavolo2.jpg'),
+(6, 'giocoDaTavolo3', 'Description for product 3', 39.99, 25, '/uploads/giocoDaTavolo3.jpg'),
+(6, 'giocoDaTavolo4', 'Description for product 4', 19.99, 100, '/uploads/giocoDaTavolo4.jpg');
 
 INSERT INTO product_categories (product_id, category_id) VALUES
 (1, 2),  -- automobile1 is in Automobili

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             stockElement.innerHTML = product.stock > 0 ? `<span class="text-success">Disponibile (${product.stock} pezzi)</span>` : '<span class="text-danger">Esaurito</span>';
             
             const imgElement = document.getElementById('product-image');
-            const imageUrl = product.image_path ? `http://localhost:3000${product.image_path}` : 'http://localhost:3000/uploads/placeholder.png';
+            /*const imageUrl = product.image_path ? `http://localhost:3000${product.image_path}` : 'http://localhost:3000/uploads/placeholder.png';
             imgElement.src = imageUrl;
             
             imgElement.onerror = () => {
@@ -33,12 +33,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                 imgElement.src = 'http://localhost:3000/uploads/placeholder.png';
             };
 
-            console.log('Product page updated successfully');
+            console.log('Product page updated successfully');*/
+            const spinner = document.getElementById('image-spinner'); // The loading spinner
+            
+            if (product.image_path) {
+                const imageUrl = `http://localhost:3000${product.image_path}`;
+                
+                // Create a new image to test loading
+                const testImage = new Image();
+                testImage.src = imageUrl;
+                
+                testImage.onload = () => {
+                    // When image loads successfully
+                    imgElement.src = imageUrl;
+                    imgElement.style.opacity = 1;
+                    spinner.style.display = 'none';
+                };
+                
+                testImage.onerror = () => {
+                    // If image fails to load
+                    showPlaceholder(imgElement, spinner);
+                };
+            } else {
+                // No image path provided
+                showPlaceholder(imgElement, spinner);
+            }
+
 
         } catch (error) {
             console.error('Error loading product:', error);
             document.getElementById('product-name').textContent = 'Errore nel caricamento del prodotto';
             document.getElementById('product-description').textContent = error.message;
         }
+    }
+
+    function showPlaceholder(imgElement, spinner) {
+        imgElement.src = 'http://localhost:3000/uploads/placeholder.png';
+        imgElement.style.opacity = 1;
+        spinner.style.display = 'none';
     }
 });
