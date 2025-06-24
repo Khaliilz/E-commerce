@@ -52,16 +52,14 @@
     padding: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     height: 300px; 
+    background-image: url("http://localhost:3000/uploads/handshake.jpg");
     background-size: cover;
     background-position: center;
     color: black;
     justify-content: end;
-    align-items: start;
-    text-decoration: none;
+    align-items: center;
     min-height: 300px;
-    color: inherit;
     overflow: hidden;
-    word-break: break-word;
 }
 .btn-light{
     width: 40px;
