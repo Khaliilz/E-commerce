@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data } = await response.json();
             const product = data.product;
 
+            if(product.stock === 0) document.getElementById('addToCartButton').disabled = true;
+
             document.getElementById('product-name').textContent = product.name;
             
             document.getElementById('product-price').textContent = `€ ${Number(product.price).toFixed(2)}`;
@@ -31,23 +33,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (product.image_path) {
                 const imageUrl = `http://localhost:3000${product.image_path}`;
                 
-                // Create a new image to test loading
                 const testImage = new Image();
                 testImage.src = imageUrl;
                 
                 testImage.onload = () => {
-                    // When image loads successfully
                     imgElement.src = imageUrl;
                     imgElement.style.opacity = 1;
                     spinner.style.display = 'none';
                 };
                 
                 testImage.onerror = () => {
-                    // If image fails to load
                     showPlaceholder(imgElement, spinner);
                 };
             } else {
-                // No image path provided
                 showPlaceholder(imgElement, spinner);
             }
 

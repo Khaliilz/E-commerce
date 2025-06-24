@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const token = sessionStorage.getItem('token');
     
     addToCartButton.addEventListener('click', async function() {
-
+        addToCartButton.disabled = true;
         if (!token) {
             window.location.href = 'login.html';
             return;

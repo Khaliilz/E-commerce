@@ -37,6 +37,7 @@ async function updateAuthUI() {
         if (isAuthenticated) {
             // Get user from sessionStorage after verification
             const user = JSON.parse(sessionStorage.getItem('user'));
+            console.log("User role:", user.role);
             
             if (user.role === "user") {
                 authDropdown.innerHTML = `<li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>`;

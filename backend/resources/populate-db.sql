@@ -1,7 +1,7 @@
 /* Mock data */
 INSERT INTO users (fullname, email, password_hash, description, role) VALUES
-('admin','admin@example.com', 'f3ad86f9661e6bb662908556a3d34be534175d9db922b801922e17cf27e3bb89', 'admin', NULL),
-('user','user@example.com', '872ccea818dd938facd03b3b7cd9fb080bb287421cc722232cf86a2c9af38113', 'user', NULL),
+('admin','admin@example.com', 'f3ad86f9661e6bb662908556a3d34be534175d9db922b801922e17cf27e3bb89', NULL,'admin'),
+('user','user@example.com', '872ccea818dd938facd03b3b7cd9fb080bb287421cc722232cf86a2c9af38113', NULL, 'user'),
 ('Mario Rossi','seller@example.com', '46ed65a631d0a7742ba4372b2419f4fcee4003c7c4478a98bcb802b96bce551a', 'ciao a tutti sono seller', 'seller'),
 ('Mario Bianchi','seller1@example.com', '49c3365571df7e2874ef76ee2cb78c737f4fe4d845d409f170b78aaafcb132b5', 'ciao a tutti sono seller1', 'seller'),
 ('Mario Neri','seller2@example.com', 'ee8220676c769fe9f62d8259e84923abef70c6e4fcfd38bbfaf6326570c306ab', 'ciao a tutti sono seller2', 'seller'),
