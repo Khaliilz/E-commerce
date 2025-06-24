@@ -77,7 +77,11 @@ a{
     height: 200px; 
     object-fit: cover;
 }
-
+.dropdown-menu {
+  min-width: 200px;
+  max-width: 90vw;
+  overflow-x: auto;
+}
 .dropdown-toggle::after {
   display: none !important;
 }
