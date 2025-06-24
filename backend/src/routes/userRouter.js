@@ -359,5 +359,32 @@ router.post('/api/v1/admin/message', authed, async (req, res) => {
     }
 });
 
+router.get('/api/v1/orders', authed, async (req, res) => {
+    try {
+        const sellerId = req.user.id;
+
+        const result = await pool.query(`
+            SELECT 
+                o.id AS order_id,
+                o.created_at,
+                o.status,
+                o.total,
+                u.fullname AS buyer_name,
+                p.name AS product_name,
+                op.quantity
+            FROM order_products op
+            JOIN orders o ON op.order_id = o.id
+            JOIN products p ON op.product_id = p.id
+            JOIN users u ON o.user_id = u.id
+            WHERE p.seller_id = $1
+            ORDER BY o.created_at DESC;
+        `, [sellerId]);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Errore nel recuperare gli ordini:', err);
+        res.status(500).json({ message: 'Errore interno del server' });
+    }
+});
 
 module.exports = router;
