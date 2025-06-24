@@ -290,4 +290,74 @@ router.get('/api/v1/seller/:id', async (req, res) => {
     }
 });
 
+router.get('/api/v1/user/message', authed, async (req, res) => {
+    try {
+        const user = await pool.query('SELECT id FROM users WHERE email = $1', [req.user.email]);
+        if (user.rows.length === 0) return res.status(400).json({ message: 'Utente non trovato.' });
+
+        const userId = user.rows[0].id;
+
+        const result = await pool.query(`
+            SELECT m.content, m.created_at 
+            FROM messages m
+            JOIN messages_recipients r ON m.id = r.message_id
+            WHERE r.recipient_id = $1
+            ORDER BY m.created_at DESC
+        `, [userId]);
+
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error('Errore nel recupero dei messaggi:', error);
+        res.status(500).json({ message: 'Errore del server' });
+    }
+});
+
+router.post('/api/v1/admin/message', authed, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accesso negato. Solo gli admin possono inviare messaggi.' });
+        }
+
+        const { targetuserEmail, message } = req.body;
+
+        if (!targetuserEmail || !message) {
+            return res.status(400).json({ message: 'Email del destinatario e messaggio sono obbligatori.' });
+        }
+
+        const sender = await pool.query('SELECT id FROM users WHERE email = $1', [req.user.email]);
+        if (sender.rows.length === 0) return res.status(400).json({ message: 'Mittente non trovato.' });
+
+        const senderId = sender.rows[0].id;
+
+        const messageInsert = await pool.query(
+            'INSERT INTO messages (sender_id, content) VALUES ($1, $2) RETURNING id',
+            [senderId, message]
+        );
+        const messageId = messageInsert.rows[0].id;
+
+        if (targetuserEmail.toLowerCase() === 'all') {
+            const users = await pool.query('SELECT id FROM users WHERE id != $1', [senderId]);
+            const recipientInserts = users.rows.map(user =>
+                pool.query('INSERT INTO messages_recipients (message_id, recipient_id) VALUES ($1, $2)', [messageId, user.id])
+            );
+            await Promise.all(recipientInserts);
+        } else {
+            const recipient = await pool.query('SELECT id FROM users WHERE email = $1', [targetuserEmail]);
+            if (recipient.rows.length === 0) {
+                return res.status(404).json({ message: 'Utente destinatario non trovato.' });
+            }
+            const recipientId = recipient.rows[0].id;
+
+            await pool.query('INSERT INTO messages_recipients (message_id, recipient_id) VALUES ($1, $2)', [messageId, recipientId]);
+        }
+
+        res.status(201).json({ message: 'Messaggio inviato con successo.' });
+
+    } catch (error) {
+        console.error('Errore invio messaggio admin:', error);
+        res.status(500).json({ message: 'Errore del server.' });
+    }
+});
+
+
 module.exports = router;

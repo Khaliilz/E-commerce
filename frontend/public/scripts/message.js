@@ -22,17 +22,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 if (response.ok) {
-                    const responseData = await response.json();
-                    
-                    const token = response.headers.get('Authorization').split(' ')[1];
-                    sessionStorage.setItem('token', token);
-                    sessionStorage.setItem('user', JSON.stringify(responseData.user));
-                    
-                    window.location.href = 'profiloAdmin.html';
+                    document.getElementById('messageStatus').innerText = "Messaggio inviato con successo!";
+                    messageForm.reset();
                 } else {
                     const errorData = await response.json();
                     document.getElementById('messageStatus').innerText = errorData.message;
                 }
+
             } catch (error) {
                 console.error('Message to user error:', error);
             }
