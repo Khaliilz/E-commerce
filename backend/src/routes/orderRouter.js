@@ -108,13 +108,11 @@ router.post('/api/v1/user/cart', authed, async (req, res) => {
 });
 
 router.post('/api/v1/user/cart/checkout', authed, async (req, res) => {
-    // Memorizza tutti gli ID dei prodotti nel carrello dell'utente in un nuovo ordine aggiunto al db, poi svuota il carrello dell'utente.
     const { id: userId } = req.user;
 
     try {
-        // Controlla se l'utente ha prodotti nel carrello
         const { rows: cartRows } = await pool.query(
-            'SELECT * FROM cart_products WHERE user_id = $1',
+            'SELECT * FROM cart_products WHERE cart_id = $1',
             [userId]
         );
 
@@ -125,12 +123,10 @@ router.post('/api/v1/user/cart/checkout', authed, async (req, res) => {
             });
         }
 
-        // get the total price of the products in the cart
         const totalPrice = cartRows.reduce((total, item) => {
             return total + (item.quantity * item.price);
         }, 0);
 
-        // Crea un nuovo ordine
         const { rows: orderRows } = await pool.query(
             'INSERT INTO orders (user_id, total, created_at) VALUES ($1, $2, NOW()) RETURNING *',
             [userId, totalPrice]
@@ -138,7 +134,6 @@ router.post('/api/v1/user/cart/checkout', authed, async (req, res) => {
 
         const orderId = orderRows[0].id;
 
-        // Aggiungi i prodotti dell'utente all'ordine
         for (const item of cartRows) {
             await pool.query(
                 'INSERT INTO order_products (order_id, product_id, quantity) VALUES ($1, $2, $3)',
@@ -146,9 +141,8 @@ router.post('/api/v1/user/cart/checkout', authed, async (req, res) => {
             );
         }
 
-        // Svuota il carrello dell'utente
         await pool.query(
-            'DELETE FROM cart_products WHERE user_id = $1',
+            'DELETE FROM cart_products WHERE cart_id = $1',
             [userId]
         );
 
