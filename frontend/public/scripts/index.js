@@ -39,11 +39,7 @@ async function updateAuthUI() {
             const user = JSON.parse(sessionStorage.getItem('user'));
             
             if (user.role === "user") {
-                authDropdown.innerHTML = `
-                <li><a class="dropdown-item" href="profiloUser.html">La tua area</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
-                `;
+                authDropdown.innerHTML = `<li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>`;
             } else if( user.role === "admin") {
                 authDropdown.innerHTML = `
                 <li><a class="dropdown-item" href="profiloAdmin.html">La tua area</a></li>

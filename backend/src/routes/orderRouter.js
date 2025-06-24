@@ -218,7 +218,7 @@ router.get('/api/v1/user/cart', authed, async (req, res) => {
     }
 });
 
-router.put('/api/v1/user/cart', authed, async (req,res)=>{
+router.put('/api/v1/user/cart', authed, async (req, res) => {
     const { id: userId } = req.user;
     const { productId, quantity } = req.body;
 
@@ -287,7 +287,7 @@ router.put('/api/v1/user/cart', authed, async (req,res)=>{
     }
 });
 
-router.delete('/api/v1/user/cart', authed, async (req,res)=>{
+router.delete('/api/v1/user/cart', authed, async (req, res) => {
     const { id: userId } = req.user;
     const { productId } = req.query;
 
@@ -299,11 +299,7 @@ router.delete('/api/v1/user/cart', authed, async (req,res)=>{
     }
 
     try {
-        // Check if product exists in user's cart
-        const { rows: cartItems } = await pool.query(
-            'SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2',
-            [userId, productId]
-        );
+        const { rows: cartItems } = await pool.query('SELECT * FROM cart_products WHERE cart_id = $1 AND product_id = $2', [userId, productId]);
 
         if (cartItems.length === 0) {
             return res.status(404).json({
