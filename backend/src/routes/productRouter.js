@@ -4,6 +4,7 @@ const { authed } = require('../middleware/index.js');
 const uploadImage = require('../middleware/upload');
 const fs = require('fs');
 const router = express.Router();
+const path = require('path');  
 
 router.post('/api/v1/products', authed, uploadImage, async (req, res) => {
     try {
@@ -61,9 +62,8 @@ router.post('/api/v1/products', authed, uploadImage, async (req, res) => {
         await pool.query('ROLLBACK');
         console.error('Error adding product:', error);
         // Clean up uploaded files on error
-        if (req.files) {
-            req.files.forEach(file => fs.unlinkSync(file.path));
-        }
+        if (req.file) fs.unlinkSync(req.file.path);
+
 
         res.status(500).json({
             status: 'error',
@@ -73,6 +73,7 @@ router.post('/api/v1/products', authed, uploadImage, async (req, res) => {
 });
 
 router.get('/api/v1/products', async (req, res) => {
+    console.log('GET /api/v1/products hit');
     try {
         const { rows } = await pool.query('SELECT * FROM products');
         res.status(200).json({
@@ -198,40 +199,6 @@ router.get('/api/v1/product/:id', async (req, res) => {
     }
 });
 
-router.get('/api/v1/products/search', async (req, res) => {
-    const { name } = req.query;
-
-    if (!name) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Name query parameter is required'
-        });
-    }
-
-    try {
-        const { rows } = await pool.query('SELECT * FROM products WHERE name ILIKE $1', [`%${name}%`]);
-        if (rows.length === 0) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'No products found matching the search criteria'
-            });
-        }
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                products: rows
-            }
-        });
-
-    } catch (error) {
-        console.error('Error searching products:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal Server Error'
-        });
-    }
-});
 
 router.get('/api/v1/products/seller/:id', async (req, res) => {
     const sellerId = parseInt(req.params.id, 10);
@@ -369,140 +336,6 @@ router.put('/api/v1/product/:id/stocks', async (req, res) => {
     }
 });
 
-router.put('/api/v1/products/seller/:id/nome', authed, uploadImage, async (req, res) => {
-    const productId = req.params.id;
-    const { name } = req.body;
-
-    try {
-        if (!productId || isNaN(productId)) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid product ID'
-            });
-        }
-
-        const { rows: productRows } = await pool.query(
-            'SELECT * FROM products WHERE id = $1',
-            [productId]
-        );
-
-        if (productRows.length === 0) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
-        }
-
-        const { rows: updatedRows } = await pool.query(
-            `UPDATE products SET name = $1 WHERE id = $2 RETURNING id, name, description, price, stock, image_path`,[name, productId]
-        );
-
-        res.status(200).json({
-            status: 'success',
-            data: updatedRows[0]
-        });
-
-    } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error'
-        });
-    }
-});
-
-router.put('/api/v1/products/seller/:id/descrizione', authed, async (req, res) => {
-    const productId = req.params.id;
-    const {description} = req.body;
-
-    try {
-        if (!productId || isNaN(productId)) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid product ID'
-            });
-        }
-
-        const { rows: productRows } = await pool.query(
-            'SELECT * FROM products WHERE id = $1',
-            [productId]
-        );
-
-        if (productRows.length === 0) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
-        }
-
-        const { rows: updatedRows } = await pool.query(
-            `UPDATE products SET description = $1 WHERE id = $2 RETURNING id, name, description, price, stock, image_path`,[description, productId]
-        );
-
-        res.status(200).json({
-            status: 'success',
-            data: updatedRows[0]
-        });
-
-    } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error'
-        });
-    }
-});
-
-router.put('/api/v1/products/seller/:id/prezzo', authed, async (req, res) => {
-    const productId = req.params.id;
-    const { price } = req.body;
-
-    try {
-        if (!productId || isNaN(productId)) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid product ID'
-            });
-        }
-
-        const { rows: productRows } = await pool.query(
-            'SELECT * FROM products WHERE id = $1',
-            [productId]
-        );
-
-        if (productRows.length === 0) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
-        }
-
-
-        if (isNaN(price) || price < 0) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Price must be a positive number'
-            });
-        }
-
-        const { rows: updatedRows } = await pool.query(
-            `UPDATE products SET price = $1 WHERE id = $2 RETURNING id, name, description, price, stock, image_path`, [price,productId]
-        );
-
-        res.status(200).json({
-            status: 'success',
-            data: updatedRows[0]
-        });
-
-    } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error'
-        });
-    }
-});
-
 router.put('/api/v1/products/seller/:id/stock', authed, async (req, res) => {
     const productId = req.params.id;
     const { stock } = req.body;
@@ -536,91 +369,6 @@ router.put('/api/v1/products/seller/:id/stock', authed, async (req, res) => {
 
         const { rows: updatedRows } = await pool.query(
             `UPDATE products SET stock = $1 WHERE id = $2 RETURNING id, name, description, price, stock, image_path`,[stock,productId]
-        );
-
-        res.status(200).json({
-            status: 'success',
-            data: updatedRows[0]
-        });
-
-    } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error'
-        });
-    }
-});
-
-router.put('/api/v1/products/seller/:id/categoria', authed, async (req, res) => {
-    const productId = req.params.id;
-    const { categoryId } = req.body;
-
-    try {
-        if (!productId || isNaN(productId)) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid product ID'
-            });
-        }
-
-        const { rows: productRows } = await pool.query(
-            'SELECT * FROM products WHERE id = $1',
-            [productId]
-        );
-
-        if (productRows.length === 0) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
-        }
-        
-        await pool.query(
-            `INSERT INTO product_categories (product_id, category_id) VALUES ($1, $2) ON CONFLICT (product_id, category_id) DO NOTHING`,
-            [productId, categoryId]
-        );
-
-        res.status(200).json({
-            status: 'success',
-            data: updatedRows[0]
-        });
-
-    } catch (error) {
-        console.error('Error updating product:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error'
-        });
-    }
-});
-
-router.put('/api/v1/products/seller/:id/immagine', authed, async (req, res) => {
-    const productId = req.params.id;
-
-    try {
-        if (!productId || isNaN(productId)) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Invalid product ID'
-            });
-        }
-
-        const { rows: productRows } = await pool.query(
-            'SELECT * FROM products WHERE id = $1',
-            [productId]
-        );
-
-        if (productRows.length === 0) {
-            return res.status(404).json({
-                status: 'error',
-                message: 'Product not found'
-            });
-        }
-
-        const { rows: updatedRows } = await pool.query(
-            `UPDATE products SET image_path = $1 WHERE id = $2 RETURNING id, name, description, price, stock, image_path`,
-            [image_path, productId]
         );
 
         res.status(200).json({

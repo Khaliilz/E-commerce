@@ -11,35 +11,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = sessionStorage.getItem('token');
     const statusDiv = document.getElementById('editProductStatus');
 
-    try {
-        // Carica le categorie
-        const categoryRes = await fetch('http://localhost:3000/api/v1/categories');
-        if (categoryRes.ok) {
-            const categories = await categoryRes.json();
-            const select = document.getElementById('productCategory');
-            select.innerHTML = '<option value="">Seleziona una categoria</option>';
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat.id;
-                opt.textContent = cat.name;
-                select.appendChild(opt);
-            });
-        }
-
-    } catch (err) {
-        console.error('Error:', err);
-        statusDiv.innerHTML = `<div class="alert alert-danger">Errore nel caricamento dei dati</div>`;
-    }
-
-    function handleFormSubmit(formId, endpoint) {
-        const form = document.getElementById(formId);
+        const form = document.getElementById('productStockBtn');
         form?.addEventListener('submit', async (e) => {
             e.preventDefault();
             statusDiv.innerHTML = '';
             const formData = new FormData(e.target);
 
             try {
-                const response = await fetch(`/api/v1/products/seller/${productId}/${endpoint}`, {
+                const response = await fetch(`/api/v1/products/seller/${productId}/${'stock'}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -57,29 +36,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (response.ok) {
                     statusDiv.innerHTML = `<div class="alert alert-success">Prodotto aggiornato con successo!</div>`;
-                    if (formData.get('image')) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            document.getElementById('currentImagePreview').src = e.target.result;
-                        };
-                        reader.readAsDataURL(formData.get('image'));
-                    }
                 } else {
                     throw new Error(result.message || 'Errore durante l\'aggiornamento');
                 }
 
             } catch (error) {
                 console.error('Error:', error);
-                statusDiv.innerHTML = `<div class="alert alert-danger">${error.message || 'Errore durante il salvataggio'}</div>`;
+                statusDiv.innerHTML = `<div class="alert alert-danger">${'Errore durante il salvataggio'}</div>`;
             }
         });
-    }
-
-    // Registrazione dei form con endpoint specifici
-    handleFormSubmit('productNameBtn', 'nome');
-    handleFormSubmit('productDescriptionBtn', 'descrizione');
-    handleFormSubmit('productPriceBtn', 'prezzo');
-    handleFormSubmit('productStockBtn', 'stock');
-    handleFormSubmit('productCategoryBtn', 'categoria');
-    handleFormSubmit('productImageBtn', 'immagine');
 });
