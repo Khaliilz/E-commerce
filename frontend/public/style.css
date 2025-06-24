@@ -85,3 +85,6 @@ a{
 .dropdown-toggle::after {
   display: none !important;
 }
+.p-4{
+    padding: 2rem !important;
+}
