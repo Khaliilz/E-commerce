@@ -11,22 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = sessionStorage.getItem('token');
     const statusDiv = document.getElementById('editProductStatus');
 
-    // Caricamento dati del prodotto
     try {
-        const response = await fetch(`/api/v1/products/${productId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Errore nel caricamento del prodotto');
-        }
-
-        const product = await response.json();
-
         // Carica le categorie
         const categoryRes = await fetch('http://localhost:3000/api/v1/categories');
         if (categoryRes.ok) {
@@ -46,7 +31,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         statusDiv.innerHTML = `<div class="alert alert-danger">Errore nel caricamento dei dati</div>`;
     }
 
-    // Funzione riutilizzabile per ogni form
     function handleFormSubmit(formId, endpoint) {
         const form = document.getElementById(formId);
         form?.addEventListener('submit', async (e) => {
