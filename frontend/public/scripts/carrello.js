@@ -55,8 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                     <span class="me-3 fw-bold">€${Number(product.price).toFixed(2)}</span>
                     <input type="number" class="form-control me-3 quantity-input" 
-                        value="${product.quantity}" min="1" max="${product.stock}" 
-                        style="width: 70px;" data-product-id="${product.product_id}">
+                        value="${product.quantity}" min="1" 
+                        style="width: 70px;" data-product-id="${product.product_id}" data-old-quantity="${product.quantity}">
                     <button class="btn btn-danger btn-sm remove-btn" data-product-id="${product.product_id}">Remove</button>
                 </div>
             `;

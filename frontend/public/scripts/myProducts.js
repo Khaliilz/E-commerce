@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text fw-bold">€${Number(product.price).toFixed(2)}</p>
-                                    <a href="prodotto.html?id=${product.id}" class="btn btn-primary">Dettagli</a>
+                                    <a href="editProduct.html?id=${product.id}" class="btn btn-primary">Modifica</a>
+                                    <input type="button" class="btn btn-primary" value="Rimuovi"></input>
                                 </div>
                             </div>
                         </div>

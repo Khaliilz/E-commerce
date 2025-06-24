@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Woodle</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <script src="scripts/index.js" defer></script>
+        <script src="scripts/editProduct.js" defer></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+            <div class="container-fluid justify-content-center">
+                <a class="navbar-brand me-4" href="index.html">Woodle</a>
+                <div class="flex-grow-1 d-flex justify-content-center">
+                    <form class="d-flex w-75" role="search">
+                        <input type="text" id="SearchBar" class="form-control w-100" placeholder="Cerca il prodotto che più ti interessa">
+                    </form>
+                </div>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+            </div>
+        </nav>
+        <div class="d-flex" style="margin-top: 126px;">
+            <nav class="bg-light border-end" style="width: 75px; min-height: 100vh; position: fixed; top: 126px; left: 0; z-index: 1020;">
+                <ul class="nav flex-column pt-3">
+                    <li class="nav-item mb-3 d-flex justify-content-center">
+                        <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="index.html">
+                            <i class="bi bi-house fs-4"></i>
+                            <span class="visually-hidden">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-3 d-flex justify-content-center">
+                        <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="carrello.html">
+                            <i class="bi bi-cart fs-4"></i>
+                            <span class="visually-hidden">Carrello</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-3 d-flex justify-content-center">
+                        <a class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center" href="avvisi.html">
+                            <i class="bi bi-bell fs-4"></i>
+                            <span class="visually-hidden">Avvisi</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mb-3 d-flex justify-content-center">
+                       <div class="dropdown">
+                            <button class="btn btn-light rounded-circle p-0 d-flex align-items-center justify-content-center dropdown-toggle"
+                                type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person fs-4"></i>
+                                <span class="visually-hidden">Profilo</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" id="authDropdown"></ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        <main class="col p-4 d-flex justify-content-center align-items-start">
+            <div class="w-100" style="max-width: 500px;">
+                <h2 class="mb-4 text-center">Modifica il prodotto</h2>
+                <form id="editProductForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Nome prodotto</label>
+                        <input type="text" class="form-control" id="productName" name="productName">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="productNameBtn">Salva</button>
+                    
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Descrizione</label>
+                        <textarea class="form-control" id="productDescription" name="productDescription" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="productDescriptionBtn">Salva</button>
+                    
+                    <div class="mb-3">
+                        <label for="productPrice" class="form-label">Prezzo (€)</label>
+                        <input type="number" class="form-control" id="productPrice" name="productPrice" min="0" step="0.01">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="productPriceBtn">Salva</button>
+                    
+                    <div class="mb-3">
+                        <label for="productStock" class="form-label">Quantità disponibile</label>
+                        <input type="number" class="form-control" id="productStock" name="productStock" min="1">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="productStockBtn">Salva</button>
+                    
+                    <div class="mb-3">
+                        <label for="productCategory" class="form-label">Categoria</label>
+                        <select class="form-select" id="productCategory" name="productCategory">
+                            <option value="">Seleziona una categoria</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="productCategoryBtn">Salva</button>
+                    
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Immagine</label>
+                        <input class="form-control" type="file" id="productImage" name="image" accept="image/*">
+                        <div class="mt-2">
+                            <img id="currentImagePreview" src="" class="img-thumbnail" style="max-height: 200px; display: none;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="productImageBtn">Salva</button>
+                </form>
+                <div id="editProductStatus" class="mt-3"></div>
+            </div>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    </body>
+</html>
