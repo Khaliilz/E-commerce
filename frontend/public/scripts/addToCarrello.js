@@ -40,8 +40,24 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 console.error(result.message || 'Errore durante l\'aggiunta al carrello');
             }
-        } catch (error) {
-            console.error('Errore di connessione:', error);
-        }
+
+            const stockResponse = await fetch(`http://localhost:3000/api/v1/product/${productId}/stocks`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    adjustment: Number(-1)
+                })
+            });
+
+            if (!stockResponse.ok) {
+                const error = await stockResponse.json();
+                throw new Error(error.message || 'Failed to update stock');
+            }
+            } catch (error) {
+                console.error('Errore di connessione:', error);
+            }
     });
 });

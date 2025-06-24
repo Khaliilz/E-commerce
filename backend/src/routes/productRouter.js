@@ -73,7 +73,7 @@ router.post('/api/v1/products', authed, uploadImage, async (req, res) => {
 });
 
 router.get('/api/v1/products', async (req, res) => {
-    console.log('GET /api/v1/products hit');
+    //console.log('GET /api/v1/products hit');
     try {
         const { rows } = await pool.query('SELECT * FROM products');
         res.status(200).json({
